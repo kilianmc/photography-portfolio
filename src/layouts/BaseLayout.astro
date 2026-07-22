@@ -1,0 +1,142 @@
+---
+import "../styles/global.css";
+// Self-hosted fonts (spec §8) via Fontsource — bundled woff2, no runtime
+// Google Fonts dependency. Variable families keep it to a few files; Fraunces
+// italic powers the hero tagline and the About/bio italics.
+import "@fontsource-variable/inter/index.css";
+import "@fontsource-variable/fraunces/index.css";
+import "@fontsource-variable/fraunces/wght-italic.css";
+import { ClientRouter } from "astro:transitions";
+import { ui } from "../i18n/ui";
+
+// Serialized once and read by the inline i18n script below — keeps the
+// dictionaries in one place (src/i18n/*.json) instead of duplicated in JS.
+const dictJson = JSON.stringify(ui);
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Absolute path to an OG image for this page (falls back to the site default). */
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = "Fotografia de retrat, flors i llum. Barcelona.",
+  ogImage,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+---
+
+<!--
+  Base document shell. `<html lang="ca">` is fixed to the CONTENT language
+  (Catalan) — only the UI chrome gets translated later via i18n (spec §6), so
+  there are no duplicate-content locale pages. View transitions provide the
+  cross-fade page motion (spec §8); nothing else animates at the page level.
+--><!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta
+      name="twitter:card"
+      content={ogImage ? "summary_large_image" : "summary"}
+    />
+
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+
+    <script
+      type="application/json"
+      id="i18n-dict"
+      is:inline
+      set:html={dictJson}
+    />
+    <script>
+      /*
+       * UI-language chrome swap (spec §6). The page is server-rendered in
+       * Catalan; on load we pick saved choice → browser language → Catalan and
+       * translate every [data-i18n] node. `<html lang>` stays "ca" (content
+       * language) — only nav/footer nodes get a per-language `lang` attribute.
+       * Runs on `astro:page-load` so it re-applies after each view transition.
+       */
+      const dictEl = document.getElementById("i18n-dict");
+      const DICT: Record<string, Record<string, string>> = dictEl
+        ? JSON.parse(dictEl.textContent || "{}")
+        : {};
+      const FALLBACK = "ca";
+
+      function applyLang(lang: string) {
+        const d = DICT[lang] || DICT[FALLBACK] || {};
+        document
+          .querySelectorAll<HTMLElement>("[data-i18n]")
+          .forEach((node) => {
+            const key = node.getAttribute("data-i18n");
+            if (key && d[key]) node.textContent = d[key];
+          });
+        document
+          .querySelectorAll<HTMLElement>("nav [data-i18n], footer [data-i18n]")
+          .forEach((node) => node.setAttribute("lang", lang));
+        const sel = document.getElementById(
+          "lang-select",
+        ) as HTMLSelectElement | null;
+        if (sel) sel.value = lang;
+        try {
+          localStorage.setItem("ui-lang", lang);
+        } catch {
+          /* private mode — ignore */
+        }
+      }
+
+      function pickLang() {
+        let saved: string | null = null;
+        try {
+          saved = localStorage.getItem("ui-lang");
+        } catch {
+          /* ignore */
+        }
+        if (saved && DICT[saved]) return saved;
+        const browser = (navigator.language || FALLBACK)
+          .slice(0, 2)
+          .toLowerCase();
+        return DICT[browser] ? browser : FALLBACK;
+      }
+
+      document.addEventListener("astro:page-load", () => applyLang(pickLang()));
+
+      // Delegated so it survives view-transition DOM swaps.
+      document.addEventListener("change", (e) => {
+        const target = e.target as HTMLElement | null;
+        if (target && target.id === "lang-select") {
+          applyLang((target as HTMLSelectElement).value);
+        }
+      });
+
+      // Hairline under the sticky header once scrolled (header looked up fresh
+      // each time so it keeps working across navigations).
+      window.addEventListener(
+        "scroll",
+        () => {
+          const header = document.getElementById("site-header");
+          if (header) header.classList.toggle("scrolled", window.scrollY > 20);
+        },
+        { passive: true },
+      );
+    </script>
+  </body>
+</html>

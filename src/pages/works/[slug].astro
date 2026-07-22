@@ -1,0 +1,214 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import Photo from "../../components/Photo.astro";
+import { getCollection, getEntry } from "astro:content";
+import { sortWorks } from "../../lib/collections";
+
+export async function getStaticPaths() {
+  const works = (await getCollection("works")).filter((w) => !w.data.draft);
+  return works.map((work) => ({ params: { slug: work.id }, props: { work } }));
+}
+
+const { work } = Astro.props;
+const d = work.data;
+const collection = await getEntry(d.collection);
+
+// Previous / Next within the same collection (canonical order, no wrap).
+const siblings = sortWorks(
+  (await getCollection("works")).filter(
+    (w) => !w.data.draft && w.data.collection.id === d.collection.id,
+  ),
+);
+const idx = siblings.findIndex((w) => w.id === work.id);
+const prev = idx > 0 ? siblings[idx - 1] : null;
+const next = idx < siblings.length - 1 ? siblings[idx + 1] : null;
+
+const meta = [d.medium, d.dimensions, String(d.year)].filter(Boolean);
+---
+
+<BaseLayout title={`${d.title} — Laia`} description={d.description ?? d.title}>
+  <Header />
+
+  <main class="work">
+    <nav class="crumb">
+      <a href="/works">← Obres</a>
+      {
+        collection && (
+          <a href={`/collections/${collection.id}`}>{collection.data.title}</a>
+        )
+      }
+    </nav>
+
+    <div class="stage">
+      <Photo
+        src={d.coverImage}
+        alt={d.coverAlt}
+        ratio="4 / 5"
+        sizes="(max-width: 900px) 100vw, 60vw"
+        widths={[600, 1000, 1600]}
+        loading="eager"
+      />
+
+      <aside class="info">
+        <h1>{d.title}</h1>
+        <p class="meta">{meta.join(" · ")}</p>
+        {d.description && <p class="desc">{d.description}</p>}
+        {
+          collection && (
+            <p class="in">
+              A{" "}
+              <a href={`/collections/${collection.id}`}>
+                {collection.data.title}
+              </a>
+            </p>
+          )
+        }
+      </aside>
+    </div>
+
+    {
+      d.gallery && d.gallery.length > 0 && (
+        <div class="gallery">
+          {d.gallery.map((g) => (
+            <Photo
+              src={g.image}
+              alt={g.alt}
+              ratio="4 / 3"
+              sizes="(max-width: 700px) 100vw, 50vw"
+            />
+          ))}
+        </div>
+      )
+    }
+
+    <nav class="pager">
+      {
+        prev ? (
+          <a class="pager-link prev" href={`/works/${prev.id}`}>
+            <span class="dir">← Anterior</span>
+            <span class="t">{prev.data.title}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next ? (
+          <a class="pager-link next" href={`/works/${next.id}`}>
+            <span class="dir">Següent →</span>
+            <span class="t">{next.data.title}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .work {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 2rem var(--gutter) clamp(3rem, 7vw, 5rem);
+  }
+  .crumb {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+    margin-bottom: 2rem;
+  }
+  .crumb a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .crumb a:hover {
+    color: var(--color-terracotta);
+  }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+  .info h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    line-height: 1.05;
+  }
+  .info .meta {
+    color: var(--color-ink-soft);
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+  }
+  .info .desc {
+    margin-top: 1.5rem;
+    max-width: 40ch;
+  }
+  .info .in {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--color-ink-soft);
+  }
+  .info .in a {
+    color: var(--color-terracotta);
+    text-decoration: none;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(1rem, 2.5vw, 2rem);
+    margin-top: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-hairline);
+  }
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    color: inherit;
+    text-decoration: none;
+  }
+  .pager-link.next {
+    text-align: right;
+  }
+  .pager-link .dir {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+  }
+  .pager-link .t {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+  }
+  .pager-link:hover .t {
+    color: var(--color-terracotta);
+  }
+
+  @media (max-width: 760px) {
+    .stage {
+      grid-template-columns: 1fr;
+    }
+    .gallery {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

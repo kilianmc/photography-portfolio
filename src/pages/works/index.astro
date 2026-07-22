@@ -1,0 +1,167 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import WorkCard from "../../components/WorkCard.astro";
+import { getCollection } from "astro:content";
+import { sortWorks } from "../../lib/collections";
+
+const works = sortWorks(
+  (await getCollection("works")).filter((w) => !w.data.draft),
+);
+const collections = (await getCollection("collections")).filter(
+  (c) => !c.data.draft,
+);
+const collTitle = new Map(collections.map((c) => [c.id, c.data.title]));
+const usedCollections = [
+  ...new Set(works.map((w) => w.data.collection.id)),
+].map((id) => ({ id, title: collTitle.get(id) ?? id }));
+const years = [...new Set(works.map((w) => w.data.year))].sort((a, b) => b - a);
+---
+
+<BaseLayout
+  title="Obres — Laia"
+  description="Totes les obres de Laia — retrat, flors i llum."
+>
+  <Header />
+
+  <main class="mx-auto max-w-6xl px-[var(--gutter)] py-16 md:py-24">
+    <h1 class="font-display text-4xl md:text-5xl">Obres</h1>
+
+    <div class="filters" id="work-filters">
+      <div class="filter-group" data-group="collection">
+        <button class="chip is-active" data-value="all" data-i18n="view_all"
+          >Totes</button
+        >
+        {
+          usedCollections.map((c) => (
+            <button class="chip" data-value={c.id}>
+              {c.title}
+            </button>
+          ))
+        }
+      </div>
+      <div class="filter-group" data-group="year">
+        <button class="chip is-active" data-value="all">Any</button>
+        {
+          years.map((y) => (
+            <button class="chip" data-value={String(y)}>
+              {y}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <div
+      class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8 lg:grid-cols-3"
+      id="work-grid"
+    >
+      {
+        works.map((w, i) => (
+          <div
+            class="work-item"
+            data-collection={w.data.collection.id}
+            data-year={w.data.year}
+          >
+            <WorkCard work={w} loading={i < 3 ? "eager" : "lazy"} />
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="empty" id="work-empty" hidden>Cap obra en aquest filtre.</p>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  // Progressive-enhancement filter (spec §5): the full grid is server-rendered
+  // and crawlable; JS only toggles visibility. Re-wired on each view transition.
+  function initWorkFilter() {
+    const root = document.getElementById("work-filters");
+    const grid = document.getElementById("work-grid");
+    const empty = document.getElementById("work-empty");
+    if (!root || !grid) return;
+
+    const state: Record<string, string> = { collection: "all", year: "all" };
+
+    function apply() {
+      let shown = 0;
+      grid!.querySelectorAll<HTMLElement>(".work-item").forEach((item) => {
+        const okColl =
+          state.collection === "all" ||
+          item.dataset.collection === state.collection;
+        const okYear = state.year === "all" || item.dataset.year === state.year;
+        const visible = okColl && okYear;
+        item.hidden = !visible;
+        if (visible) shown++;
+      });
+      if (empty) empty.hidden = shown !== 0;
+    }
+
+    root.querySelectorAll<HTMLElement>(".filter-group").forEach((group) => {
+      const key = group.dataset.group!;
+      group.querySelectorAll<HTMLButtonElement>(".chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          state[key] = chip.dataset.value!;
+          group
+            .querySelectorAll(".chip")
+            .forEach((c) => c.classList.remove("is-active"));
+          chip.classList.add("is-active");
+          apply();
+        });
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", initWorkFilter);
+</script>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 2.5rem;
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .chip {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--color-hairline);
+    border-radius: 999px;
+    color: var(--color-ink-soft);
+    font: inherit;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.9rem;
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      color 0.2s ease,
+      background 0.2s ease;
+  }
+  .chip:hover {
+    border-color: var(--color-terracotta);
+    color: var(--color-ink);
+  }
+  .chip.is-active {
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+    color: var(--color-bone);
+  }
+  .empty {
+    margin-top: 3rem;
+    text-align: center;
+    color: var(--color-ink-soft);
+  }
+</style>

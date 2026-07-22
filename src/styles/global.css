@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/*
+ * Warm-gallery design system (PROJECT_SPEC.md §8). Tailwind v4 CSS-first tokens:
+ * each --color-* / --font-* here generates utilities (bg-bone, text-ink,
+ * text-terracotta, font-display, font-body, …). UI stays near-monochrome so the
+ * photographs carry the colour; terracotta is the single accent, used sparingly.
+ */
+@theme {
+  --color-bone: #f4eee4; /* warm background */
+  --color-ink: #221e19; /* warm near-black text */
+  --color-terracotta: #b4703f; /* accent — sparingly */
+  --color-sage: #7c7a5f; /* optional secondary */
+
+  /* Practical shades realized during design (mockup): a slightly deeper bone for
+   * alternating sections, a soft ink for muted/secondary text, a warm hairline
+   * for rules/borders. */
+  --color-bone-2: #efe7da;
+  --color-ink-soft: #6b6155;
+  --color-hairline: #d9cfbf;
+
+  /* Fraunces (display) + Inter (body), self-hosted via Fontsource variable
+   * families (imported in BaseLayout). System serif/sans stay as fallbacks. */
+  --font-display:
+    "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
+  --font-body:
+    "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+}
+
+@layer base {
+  :root {
+    /* shared horizontal page gutter */
+    --gutter: clamp(1.25rem, 4vw, 4rem);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-bone);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* Sticky footer: fill the viewport and let <main> take the slack so the
+     * footer stays pinned to the bottom even on short pages / large screens. */
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  main {
+    flex: 1 0 auto;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+  }
+}

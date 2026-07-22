@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import Photo from "../../components/Photo.astro";
+import { getCollection } from "astro:content";
+import { exhibitionStatus, isExhibition } from "../../lib/collections";
+
+const all = (await getCollection("collections"))
+  .filter((c) => !c.data.draft)
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+const current = all.filter((c) => exhibitionStatus(c) === "current");
+const past = all.filter((c) => exhibitionStatus(c) === "past");
+const series = all.filter((c) => !isExhibition(c));
+
+const groups = [
+  { key: "current", label: "Exposicions actuals", items: current },
+  { key: "past", label: "Exposicions passades", items: past },
+  { key: "series", label: "Sèries", items: series },
+].filter((g) => g.items.length > 0);
+---
+
+<BaseLayout
+  title="Col·leccions — Laia"
+  description="Col·leccions i exposicions de Laia."
+>
+  <Header />
+
+  <main class="mx-auto max-w-6xl px-[var(--gutter)] py-16 md:py-24">
+    <h1 class="font-display text-4xl md:text-5xl">Col·leccions</h1>
+
+    {
+      groups.map((group) => (
+        <section class="group">
+          <h2 class="group-head">{group.label}</h2>
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
+            {group.items.map((c) => (
+              <a class="coll" href={`/collections/${c.id}`}>
+                <Photo
+                  src={c.data.coverImage}
+                  alt={c.data.coverAlt}
+                  ratio="3 / 2"
+                />
+                <div class="coll-meta">
+                  <h3>{c.data.title}</h3>
+                  {(c.data.city || c.data.startDate) && (
+                    <p class="where">
+                      {[c.data.city, c.data.startDate?.getFullYear()]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </p>
+                  )}
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .group {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+  .group-head {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    padding-bottom: 0.75rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .coll {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+  .coll:hover :global(.photo img) {
+    transform: scale(1.03);
+  }
+  .coll-meta {
+    margin-top: 0.9rem;
+  }
+  .coll-meta h3 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+  }
+  .coll-meta .where {
+    color: var(--color-ink-soft);
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+  }
+</style>

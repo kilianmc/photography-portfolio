@@ -1,0 +1,181 @@
+---
+import { ui, defaultLang } from "../i18n/ui";
+
+const t = ui[defaultLang];
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <p class="fine">
+    © {year} ·{" "}
+    <span class="rights-wrap">
+      <button type="button" class="rights" aria-describedby="rights-tip">
+        <span data-i18n="rights">{t.rights}</span>
+      </button>
+      <span class="rights-tip" id="rights-tip" role="tooltip">
+        © {year} Laia. Totes les obres estan protegides per drets d'autor i no es
+        poden reproduir ni utilitzar sense el seu permís.
+      </span>
+    </span>
+  </p>
+
+  <div class="links">
+    <a
+      class="icon"
+      href="https://instagram.com/"
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Instagram"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"
+        ></circle>
+      </svg>
+    </a>
+
+    <a class="icon" href="mailto:hola@laia.art.photo" aria-label="Correu">
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+        <path d="M3.5 6.5 L12 12.5 L20.5 6.5"></path>
+      </svg>
+    </a>
+  </div>
+</footer>
+
+<style>
+  footer {
+    padding: 0.7rem var(--gutter);
+    border-top: 1px solid var(--color-hairline);
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .fine {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 0.78rem;
+    opacity: 0.85;
+  }
+  .rights-wrap {
+    position: relative;
+    display: inline-block;
+  }
+  .rights {
+    appearance: none;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: help;
+    border-bottom: 1px dotted currentColor;
+  }
+  .rights:hover,
+  .rights:focus-visible {
+    color: var(--color-ink);
+  }
+  .rights-tip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 0;
+    width: max-content;
+    max-width: min(320px, 78vw);
+    background: var(--color-ink);
+    color: var(--color-bone);
+    font-size: 0.72rem;
+    line-height: 1.5;
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    border-radius: 4px;
+    box-shadow: 0 6px 24px rgba(34, 30, 25, 0.25);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      visibility 0.2s;
+    z-index: 30;
+    pointer-events: none;
+  }
+  /* small arrow */
+  .rights-tip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 1.5rem;
+    border: 5px solid transparent;
+    border-top-color: var(--color-ink);
+  }
+  .rights-wrap:hover .rights-tip,
+  .rights:focus-visible ~ .rights-tip,
+  .rights-wrap.open .rights-tip {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .links .icon {
+    display: inline-flex;
+    color: var(--color-ink-soft);
+    transition:
+      color 0.25s ease,
+      transform 0.25s ease;
+  }
+  .links .icon:hover {
+    color: var(--color-terracotta);
+    transform: translateY(-1px);
+  }
+  .links svg {
+    display: block;
+  }
+</style>
+
+<script>
+  // CSS handles hover/focus; this adds click-to-toggle (touch, no hover) and
+  // closes on outside-click / Escape. Attached once so it survives view
+  // transitions.
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    const btn = target instanceof Element ? target.closest(".rights") : null;
+    document.querySelectorAll(".rights-wrap.open").forEach((w) => {
+      if (!btn || !w.contains(btn)) w.classList.remove("open");
+    });
+    if (btn) btn.closest(".rights-wrap")?.classList.toggle("open");
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape")
+      document
+        .querySelectorAll(".rights-wrap.open")
+        .forEach((w) => w.classList.remove("open"));
+  });
+</script>

@@ -1,0 +1,131 @@
+---
+import { ui, defaultLang, languages } from "../i18n/ui";
+
+// Server-render the chrome in the content language (Catalan); the inline i18n
+// script in BaseLayout swaps `[data-i18n]` text to the visitor's language on
+// load. `<html lang>` stays "ca" — only these nav/footer nodes get a per-lang
+// `lang` attribute (set by that script) for screen readers.
+const t = ui[defaultLang];
+---
+
+<header id="site-header">
+  <a class="brand" href="/">Laia</a>
+  <nav>
+    <ul>
+      <li class="nav-link">
+        <a href="/works" data-i18n="works">{t.works}</a>
+      </li>
+      <li class="nav-link">
+        <a href="/collections" data-i18n="collections">{t.collections}</a>
+      </li>
+      <li class="nav-link">
+        <a href="/about" data-i18n="about">{t.about}</a>
+      </li>
+      <li class="lang">
+        <select id="lang-select" aria-label="Language">
+          {languages.map((l) => <option value={l}>{l.toUpperCase()}</option>)}
+        </select>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<style>
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem var(--gutter);
+    background: color-mix(in srgb, var(--color-bone) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+  header.scrolled {
+    border-bottom-color: var(--color-hairline);
+  }
+  .brand {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.35rem;
+    letter-spacing: 0.04em;
+    color: inherit;
+    text-decoration: none;
+  }
+  nav ul {
+    display: flex;
+    gap: clamp(1rem, 2.5vw, 2.5rem);
+    list-style: none;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+  nav a {
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.25s ease;
+  }
+  nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    background: var(--color-terracotta);
+    transition: width 0.3s ease;
+  }
+  nav a:hover {
+    color: var(--color-ink);
+  }
+  nav a:hover::after {
+    width: 100%;
+  }
+  .lang {
+    position: relative;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .lang select {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--color-hairline);
+    border-radius: 999px;
+    color: var(--color-ink-soft);
+    font: inherit;
+    letter-spacing: 0.08em;
+    padding: 0.35rem 1.9rem 0.35rem 0.8rem;
+    cursor: pointer;
+    transition:
+      border-color 0.25s ease,
+      color 0.25s ease;
+  }
+  .lang select:hover {
+    border-color: var(--color-terracotta);
+    color: var(--color-ink);
+  }
+  .lang::after {
+    content: "▾";
+    position: absolute;
+    right: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--color-ink-soft);
+    font-size: 0.7rem;
+  }
+  @media (max-width: 720px) {
+    nav ul li.nav-link {
+      display: none;
+    }
+  }
+</style>

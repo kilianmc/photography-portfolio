@@ -1,0 +1,147 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { Image } from "astro:assets";
+import { Content, frontmatter } from "../content/about.md";
+import portrait from "../assets/portrait.jpg";
+---
+
+<BaseLayout
+  title={`Sobre — ${frontmatter.name}`}
+  description={frontmatter.statement}
+>
+  <Header />
+
+  <main class="about">
+    <div class="portrait">
+      <Image
+        src={portrait}
+        alt={`Autoretrat de ${frontmatter.name}`}
+        widths={[500, 800, 1100]}
+        sizes="(max-width: 820px) 100vw, 45vw"
+        loading="eager"
+      />
+    </div>
+
+    <div class="text">
+      <p class="eyebrow">
+        {[frontmatter.role, frontmatter.city].filter(Boolean).join(" · ")}
+      </p>
+      <h1>{frontmatter.name}</h1>
+      <blockquote class="statement">{frontmatter.statement}</blockquote>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <div class="contact">
+        <p class="contact-lead">
+          Si vols contactar amb la Laia —per encàrrecs, exposicions o simplement
+          per dir hola— aquests són els canals:
+        </p>
+        <div class="links">
+          <a href={`mailto:${frontmatter.email}`} data-i18n="email">Correu</a>
+          {
+            frontmatter.instagram && (
+              <a href={frontmatter.instagram} target="_blank" rel="noreferrer">
+                Instagram
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .about {
+    display: grid;
+    grid-template-columns: 0.85fr 1fr;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: start;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 7vw, 5rem) var(--gutter);
+  }
+  .portrait {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--color-bone-2);
+    aspect-ratio: 4 / 5;
+  }
+  .portrait :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(1.02) contrast(1.01);
+  }
+  .text {
+    padding-top: clamp(0.25rem, 2vw, 1.5rem);
+  }
+  .eyebrow {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-terracotta);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-top: 0.5rem;
+  }
+  .statement {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.25rem, 3vw, 1.6rem);
+    margin: 1.75rem 0;
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--color-terracotta);
+    color: var(--color-ink);
+  }
+  .prose :global(p) {
+    margin-bottom: 1.1rem;
+    color: var(--color-ink-soft);
+    line-height: 1.7;
+  }
+  .contact {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-hairline);
+  }
+  .contact-lead {
+    max-width: 42ch;
+    margin-bottom: 1.25rem;
+    color: var(--color-ink-soft);
+    line-height: 1.7;
+  }
+  .links {
+    display: flex;
+    gap: 1.75rem;
+  }
+  .links a {
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+  .links a:hover {
+    color: var(--color-terracotta);
+  }
+
+  @media (max-width: 820px) {
+    .about {
+      grid-template-columns: 1fr;
+    }
+    .portrait {
+      max-width: 26rem;
+    }
+  }
+</style>
