@@ -13,8 +13,11 @@ const year = new Date().getFullYear();
         <span data-i18n="rights">{t.rights}</span>
       </button>
       <span class="rights-tip" id="rights-tip" role="tooltip">
-        © {year} Laia. Totes les obres estan protegides per drets d'autor i no es
-        poden reproduir ni utilitzar sense el seu permís.
+        © {year} Laia.{" "}
+        <span data-i18n="rights_notice"
+          >Totes les obres estan protegides per drets d'autor i no es poden
+          reproduir ni utilitzar sense el seu permís.</span
+        >
       </span>
     </span>
   </p>
