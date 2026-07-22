@@ -33,7 +33,7 @@ and almost maintenance-free.
 - **Prettier** (with `prettier-plugin-astro`) for formatting; `format:check` runs
   in CI.
 - Deployed on **Cloudflare Pages** (auto-deploy on push).
-- **Node** per `.nvmrc` = `23.10.0` (`engines` floor: `>=22.12.0`).
+- **Node** per `.nvmrc` = `24` (LTS; `engines` floor: `>=22.12.0`).
 
 ## Project structure
 
