@@ -6,7 +6,7 @@ formularis.
 
 ## Com entrar
 
-1. Ves a **<https://artlaia.pages.dev/admin>**
+1. Ves a **`https://<el-teu-web>.pages.dev/admin`** (l'adreça del teu web + `/admin`)
 2. Clica **Inicia sessió amb GitHub** i autoritza l'accés.
 3. Ja hi ets. A l'esquerra veuràs les seccions: **Obres**, **Col·leccions**,
    **Portada** i **Sobre l'autora**.
@@ -76,12 +76,15 @@ No cal activar res més: omplir aquests camps _és_ l'interruptor.
 
 - Puja imatges **de bona resolució** (uns 2500 px pel costat llarg). El web ja
   en fa versions més petites i optimitzades automàticament.
-- Format **JPG** o **WebP**.
+- Formats acceptats: **JPG, PNG, WebP o AVIF** (en majúscules o minúscules és
+  igual). **Evita** altres formats com **HEIC** (el format per defecte de
+  l'iPhone), **TIFF** o **GIF** — si els fas servir, la imatge pot no aparèixer.
+  Si tens una foto en HEIC, exporta-la o desa-la abans com a JPG.
 - El **text alternatiu** és obligatori a cada imatge: una frase que descrigui què
   s'hi veu.
 - No cal reanomenar els fitxers ni preparar mides diferents: el web ho fa sol.
 
 ## Dubtes
 
-Si alguna cosa no surt com esperes, avisa en Kilian. Res del que facis aquí pot
+Si alguna cosa no surt com esperes, avisa qui gestiona el web. Res del que facis aquí pot
 «trencar» el web de manera irreversible: cada canvi queda desat i es pot revertir.

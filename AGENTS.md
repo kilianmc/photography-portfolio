@@ -5,11 +5,11 @@ a PR. (`CLAUDE.md` is a symlink to this file.)
 
 ## Overview
 
-**`photography-portfolio`** is a museum-quality photography-portfolio website,
-built as an example piece in Kilian's web-dev portfolio. The **live example
-instance is Laia** (laia.art.photo), a Barcelona portrait/flower/light
-photographer — the project name is deliberately generic, but the shipped content
-is Laia's.
+**`photography-portfolio`** is a museum-quality photography-portfolio website —
+a generic, reusable template. It ships with example content (a fictional
+photographer) so the site looks complete out of the box; treat that content as a
+placeholder, and keep all docs, comments, and code generic rather than tied to
+any specific artist.
 
 `PROJECT_SPEC.md` (in the workspace root, alongside this repo) is the planning
 **source of truth**; `mockup.html` is the approved home-page mockup. When in
@@ -66,8 +66,8 @@ src/
 - Required `alt` and the `draft` flag are enforced by schema. Keep frontmatter
   **flat and stable** — it's the real dependency for the CMS.
 
-**Content editing (Sveltia CMS):** Laia manages content through a git-based CMS
-at `/admin` ([`public/admin/config.yml`](public/admin/config.yml)). Its forms map
+**Content editing (Sveltia CMS):** the artist manages content through a git-based
+CMS at `/admin` ([`public/admin/config.yml`](public/admin/config.yml)). Its forms map
 1:1 onto the schemas above, so **keep `config.yml` in sync when you change a
 schema field**. Collection-level `media_folder`/`public_folder` are set to the
 same relative path (e.g. `../../assets/works`) on purpose — see
@@ -125,10 +125,10 @@ CI (`.github/workflows/ci.yml`, job `check-build`) runs `npm ci` →
 
 - **Branches:** `dev` (integration) and `main` (production). Feature PRs target
   `dev`; `main` receives only `dev`→`main` promotion PRs.
-- **Content is the exception:** the CMS commits Laia's content straight to `main`
-  (see [`docs/CMS.md`](docs/CMS.md)), so `main` carries content commits `dev`
-  lacks. Promote `dev`→`main` with a **merge (never ff/force)** to keep her
-  content, and **back-merge `main`→`dev`** periodically to sync it down.
+- **Content is the exception:** the CMS commits the artist's content straight to
+  `main` (see [`docs/CMS.md`](docs/CMS.md)), so `main` carries content commits
+  `dev` lacks. Promote `dev`→`main` with a **merge (never ff/force)** to keep
+  that content, and **back-merge `main`→`dev`** periodically to sync it down.
 - **Cloudflare Pages:** `dev` → dev URL, `main` → production. Build command
   `npm run build`, output dir `dist`.
 - **Versioning:** baseline production = **1.0.0**. Dev iterations bump the

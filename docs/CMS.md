@@ -1,15 +1,15 @@
 # Content management (Sveltia CMS)
 
-> **For Laia:** a plain-language, Catalan how-to lives in
-> [`GUIA-LAIA.ca.md`](GUIA-LAIA.ca.md). This file is the technical/setup reference.
+> **For the editor:** a plain-language, Catalan how-to lives in
+> [`GUIA-CMS.ca.md`](GUIA-CMS.ca.md). This file is the technical/setup reference.
 
-Laia edits the site through a git-based CMS — **[Sveltia CMS](https://sveltiacms.app)**,
-a modern, Decap-compatible editor. There is **no server and no database**: every
-change she makes is committed to this repository as a Markdown file (plus any
-uploaded image), exactly matching the schemas in
-[`src/content.config.ts`](../src/content.config.ts). Cloudflare Pages rebuilds on
-each commit and `astro:assets` optimises the images. Nothing about the build
-changes.
+The artist edits the site through a git-based CMS —
+**[Sveltia CMS](https://sveltiacms.app)**, a modern, Decap-compatible editor.
+There is **no server and no database**: every change is committed to this
+repository as a Markdown file (plus any uploaded image), exactly matching the
+schemas in [`src/content.config.ts`](../src/content.config.ts). Cloudflare Pages
+rebuilds on each commit and `astro:assets` optimises the images. Nothing about
+the build changes.
 
 The whole CMS is two static files served from the site:
 
@@ -22,17 +22,17 @@ The whole CMS is two static files served from the site:
 ## Branching model — content goes straight to `main`
 
 This repo normally uses **feature → `dev` → `main`** for code. **Content is the
-exception:** the CMS `backend.branch` is **`main`**, so when Laia hits _Publish_
-her change commits to `main` and Cloudflare deploys it live. She never runs a
-`dev` → `main` promotion — that would require developer access she doesn't have.
+exception:** the CMS `backend.branch` is **`main`**, so when the editor hits
+_Publish_ the change commits to `main` and Cloudflare deploys it live. The editor
+never runs a `dev` → `main` promotion — that would require developer access.
 
 Because content lands on `main` directly, `main` will carry content commits that
 `dev` doesn't have. Keep the two branches from drifting:
 
-- **Code promotions `dev` → `main` are merges (not fast-forward)** so Laia's
+- **Code promotions `dev` → `main` are merges (not fast-forward)** so published
   content on `main` is preserved. (Never force-push or hard-reset `main`.)
-- **Periodically back-merge `main` → `dev`** so developers pick up her real
-  content (same pattern the fund/shell repos use after a release).
+- **Periodically back-merge `main` → `dev`** so developers pick up the real
+  content (same pattern the other repos use after a release).
 
 > Media/upload paths: each collection sets `media_folder` and `public_folder` to
 > the **same relative path** (e.g. `../../assets/works`). That makes uploads land
@@ -73,8 +73,8 @@ URL: `https://sveltia-cms-auth.<SUBDOMAIN>.workers.dev`.
 **2. Create a GitHub OAuth App** (GitHub → Settings → Developer settings → OAuth
 Apps → New):
 
-- **Application name:** `Laia Photography CMS` (anything)
-- **Homepage URL:** `https://artlaia.pages.dev`
+- **Application name:** `Photography Portfolio CMS` (anything)
+- **Homepage URL:** `https://<your-site>.pages.dev`
 - **Authorization callback URL:** `<YOUR_WORKER_URL>/callback`
 
 Generate a client secret; copy the **Client ID** and **Client Secret**.
@@ -82,11 +82,11 @@ Generate a client secret; copy the **Client ID** and **Client Secret**.
 **3. Set the worker's environment variables** (Cloudflare → Workers →
 `sveltia-cms-auth` → Settings → Variables):
 
-| Variable               | Value                                                              |
-| ---------------------- | ------------------------------------------------------------------ |
-| `GITHUB_CLIENT_ID`     | the Client ID from step 2                                          |
-| `GITHUB_CLIENT_SECRET` | the Client Secret (tick **Encrypt**)                               |
-| `ALLOWED_DOMAINS`      | `artlaia.pages.dev` (add the custom domain later, comma-separated) |
+| Variable               | Value                                                                  |
+| ---------------------- | ---------------------------------------------------------------------- |
+| `GITHUB_CLIENT_ID`     | the Client ID from step 2                                              |
+| `GITHUB_CLIENT_SECRET` | the Client Secret (tick **Encrypt**)                                   |
+| `ALLOWED_DOMAINS`      | `<your-site>.pages.dev` (add the custom domain later, comma-separated) |
 
 Redeploy the worker after adding them.
 
@@ -97,20 +97,20 @@ placeholder under `backend` with the worker URL from step 1:
 ```yaml
 backend:
   name: github
-  repo: kilianmc/photography-portfolio
+  repo: <owner>/<repo>
   branch: main
   base_url: https://sveltia-cms-auth.<SUBDOMAIN>.workers.dev
 ```
 
-Commit that to `main`. Laia can now go to
-<https://artlaia.pages.dev/admin>, click **Login with GitHub**, and publish.
+Commit that to `main`. The editor can now go to `https://<your-site>.pages.dev/admin`,
+click **Login with GitHub**, and publish.
 
-> Laia needs write access to the `kilianmc/photography-portfolio` repo
-> (Collaborator) for her commits to succeed.
+> The editor needs write access to the repository (Collaborator) for their
+> commits to succeed.
 
 ---
 
-## How Laia adds a photo
+## How the editor adds a photo
 
 1. Go to `/admin` and log in with GitHub.
 2. **Obres → New Obra.** Fill the title, year, technique; pick the collection

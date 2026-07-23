@@ -1,6 +1,6 @@
 # Sveltia CMS configuration — https://sveltiacms.app
 #
-# Git-based CMS: every change Laia makes is committed straight to the repo as a
+# Git-based CMS: every change the artist makes is committed straight to the repo as a
 # Markdown file (+ uploaded image), exactly matching the schema in
 # src/content.config.ts, so Astro's astro:assets pipeline optimises the images
 # on the next build. Nothing here changes how the site builds.
@@ -14,7 +14,7 @@ backend:
   name: github
   repo: kilianmc/photography-portfolio
   # Content commits go straight to `main` (the branch Cloudflare Pages deploys),
-  # so Laia's edits go live on publish — she never runs a dev→main promotion.
+  # so the artist's edits go live on publish — no dev→main promotion needed.
   # Code still flows feature→dev→main; promotions merge (not ff) to preserve her
   # content, and main→dev back-merges keep dev in sync. See docs/CMS.md.
   branch: main
@@ -73,6 +73,7 @@ collections:
           label: Imatge principal,
           widget: image,
           choose_url: false,
+          hint: "Formats: JPG, PNG, WebP o AVIF (evita HEIC, TIFF o GIF).",
         }
       - {
           name: coverAlt,
@@ -99,7 +100,13 @@ collections:
         label_singular: Imatge
         summary: "{{fields.alt}}"
         fields:
-          - { name: image, label: Imatge, widget: image, choose_url: false }
+          - {
+              name: image,
+              label: Imatge,
+              widget: image,
+              choose_url: false,
+              hint: "Formats: JPG, PNG, WebP o AVIF (evita HEIC, TIFF o GIF).",
+            }
           - { name: alt, label: Text alternatiu, widget: string }
       - {
           name: body,
@@ -133,6 +140,7 @@ collections:
           label: Imatge principal,
           widget: image,
           choose_url: false,
+          hint: "Formats: JPG, PNG, WebP o AVIF (evita HEIC, TIFF o GIF).",
         }
       - { name: coverAlt, label: Text alternatiu, widget: string }
       - {
@@ -210,6 +218,7 @@ collections:
               label: Imatge de portada,
               widget: image,
               choose_url: false,
+              hint: "Formats: JPG, PNG, WebP o AVIF (evita HEIC, TIFF o GIF).",
             }
           - {
               name: heroAlt,
@@ -249,6 +258,7 @@ collections:
               widget: image,
               choose_url: false,
               required: false,
+              hint: "Formats: JPG, PNG, WebP o AVIF (evita HEIC, TIFF o GIF).",
             }
           - {
               name: portraitAlt,
