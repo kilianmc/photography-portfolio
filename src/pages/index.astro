@@ -4,11 +4,23 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import WorkCard from "../components/WorkCard.astro";
 import Photo from "../components/Photo.astro";
+import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import { frontmatter as about } from "../content/about.md";
+import { frontmatter as home } from "../content/home.md";
 import { sortWorks, exhibitionStatus } from "../lib/collections";
-import heroImg from "../assets/works/hero.jpg";
+
+// The hero image is CMS-managed via home.md frontmatter. Resolve its path (e.g.
+// ../assets/home/hero.jpg) to an optimisable image — keys match because
+// home.md and this file both sit one level under src/.
+const assetImages = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/**/*.{jpeg,jpg,png,webp,avif,JPEG,JPG,PNG,WEBP,AVIF}",
+  { eager: true },
+);
+const heroImg = home.heroImage
+  ? assetImages[home.heroImage]?.default
+  : undefined;
 
 const works = sortWorks(
   (await getCollection("works")).filter((w) => !w.data.draft),
@@ -27,13 +39,17 @@ const status = featured ? exhibitionStatus(featured) : null;
 
   <section class="hero">
     <div class="hero-photo">
-      <Image
-        src={heroImg}
-        alt="Retrat a contrallum amb flors"
-        widths={[800, 1200, 1800]}
-        sizes="100vw"
-        loading="eager"
-      />
+      {
+        heroImg && (
+          <Image
+            src={heroImg}
+            alt={home.heroAlt ?? "Retrat a contrallum amb flors"}
+            widths={[800, 1200, 1800]}
+            sizes="100vw"
+            loading="eager"
+          />
+        )
+      }
     </div>
     <div class="hero-caption">
       <h1>Laia</h1>
@@ -61,10 +77,7 @@ const status = featured ? exhibitionStatus(featured) : null;
     <section class="section bio-section">
       <div class="bio">
         <h2>{about.city}</h2>
-        <p>
-          Fotògrafa de retrat i natura. La seva obra explora la llum, les flors
-          i l'emoció del moment íntim, amb una mirada càlida i cinematogràfica.
-        </p>
+        <p>{home.intro}</p>
         <a class="more" href="/about" data-i18n="read_more">Llegir més</a>
       </div>
     </section>

@@ -194,6 +194,36 @@ collections:
         }
       - { name: body, label: Text, widget: markdown, required: false }
 
+  # ── Portada (fitxer únic) ───────────────────────────────────────────────────
+  - name: home
+    label: Portada
+    description: La imatge gran de la pàgina d'inici.
+    files:
+      - name: home
+        label: Portada
+        file: src/content/home.md
+        media_folder: ../assets/home
+        public_folder: ../assets/home
+        fields:
+          - {
+              name: heroImage,
+              label: Imatge de portada,
+              widget: image,
+              choose_url: false,
+            }
+          - {
+              name: heroAlt,
+              label: Text alternatiu (accessibilitat),
+              widget: string,
+              hint: Descriu la imatge per a lectors de pantalla.,
+            }
+          - {
+              name: intro,
+              label: Text d'introducció,
+              widget: text,
+              hint: El paràgraf curt que apareix a la pàgina d'inici, sota el nom de la ciutat.,
+            }
+
   # ── Sobre l'autora (fitxer únic) ────────────────────────────────────────────
   - name: about
     label: Sobre l'autora

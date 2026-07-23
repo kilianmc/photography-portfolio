@@ -1,5 +1,8 @@
 # Content management (Sveltia CMS)
 
+> **For Laia:** a plain-language, Catalan how-to lives in
+> [`GUIA-LAIA.ca.md`](GUIA-LAIA.ca.md). This file is the technical/setup reference.
+
 Laia edits the site through a git-based CMS — **[Sveltia CMS](https://sveltiacms.app)**,
 a modern, Decap-compatible editor. There is **no server and no database**: every
 change she makes is committed to this repository as a Markdown file (plus any
