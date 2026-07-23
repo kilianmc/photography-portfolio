@@ -60,53 +60,33 @@ This is the recommended way to sanity-check config changes before shipping.
 
 ---
 
-## Production setup (one-time) — GitHub auth worker
+## Authentication — GitHub personal access token (no worker, no setup)
 
-Because the site is on Cloudflare Pages (not Netlify), GitHub login needs a tiny
-auth worker: **[`sveltia-cms-auth`](https://github.com/sveltia/sveltia-cms-auth)**.
-It has no ongoing cost or maintenance.
+Sveltia authenticates directly against GitHub with a **personal access token
+(PAT)** entered in the browser — there is **no OAuth worker, no OAuth app, no
+`base_url`, and no secrets** to deploy or maintain. This is why the config's
+`backend` block has no `base_url`.
 
-**1. Deploy the worker.** From the `sveltia-cms-auth` repo, use its Cloudflare
-"Deploy" button, or `git clone` it and run `wrangler deploy`. Note the resulting
-URL: `https://sveltia-cms-auth.<SUBDOMAIN>.workers.dev`.
+The only requirement: **each editor needs a GitHub account with write access
+(Collaborator) to this repository.** Invite them under GitHub → the repo →
+Settings → Collaborators.
 
-**2. Create a GitHub OAuth App** (GitHub → Settings → Developer settings → OAuth
-Apps → New):
+Each editor signs in with **their own** account and **their own** token (commits
+are authored as them). They generate it themselves — see the sign-in steps in
+[`GUIA-CMS.ca.md`](GUIA-CMS.ca.md). In short, on the `/admin` login screen they
+click **"Sign In with Token"**; Sveltia opens GitHub's token page with the
+required scopes pre-selected; they generate the token and paste it back. It's
+stored locally in that browser only.
 
-- **Application name:** `Photography Portfolio CMS` (anything)
-- **Homepage URL:** `https://<your-site>.pages.dev`
-- **Authorization callback URL:** `<YOUR_WORKER_URL>/callback`
+**Token expiry.** A token can be set to expire or to **never expire**. For a
+low-friction, effectively one-time sign-in, create the token with a **long or no
+expiry**. When a token does expire, the editor simply repeats the sign-in (same
+steps). A **fine-grained** token scoped to just this repository's _Contents
+(read/write)_ is the tightest option; a **classic** token with the `repo` scope
+and "No expiration" is the most convenient.
 
-Generate a client secret; copy the **Client ID** and **Client Secret**.
-
-**3. Set the worker's environment variables** (Cloudflare → Workers →
-`sveltia-cms-auth` → Settings → Variables):
-
-| Variable               | Value                                                                  |
-| ---------------------- | ---------------------------------------------------------------------- |
-| `GITHUB_CLIENT_ID`     | the Client ID from step 2                                              |
-| `GITHUB_CLIENT_SECRET` | the Client Secret (tick **Encrypt**)                                   |
-| `ALLOWED_DOMAINS`      | `<your-site>.pages.dev` (add the custom domain later, comma-separated) |
-
-Redeploy the worker after adding them.
-
-**4. Point the CMS at the worker.** In
-[`public/admin/config.yml`](../public/admin/config.yml), replace the `base_url`
-placeholder under `backend` with the worker URL from step 1:
-
-```yaml
-backend:
-  name: github
-  repo: <owner>/<repo>
-  branch: main
-  base_url: https://sveltia-cms-auth.<SUBDOMAIN>.workers.dev
-```
-
-Commit that to `main`. The editor can now go to `https://<your-site>.pages.dev/admin`,
-click **Login with GitHub**, and publish.
-
-> The editor needs write access to the repository (Collaborator) for their
-> commits to succeed.
+> Because there is no shared infrastructure, this template works out of the box
+> for any fork — no per-deployment auth setup.
 
 ---
 
