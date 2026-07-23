@@ -72,18 +72,31 @@ The only requirement: **each editor needs a GitHub account with write access
 Settings → Collaborators.
 
 Each editor signs in with **their own** account and **their own** token (commits
-are authored as them). They generate it themselves — see the sign-in steps in
-[`GUIA-CMS.ca.md`](GUIA-CMS.ca.md). In short, on the `/admin` login screen they
-click **"Sign In with Token"**; Sveltia opens GitHub's token page with the
-required scopes pre-selected; they generate the token and paste it back. It's
-stored locally in that browser only.
+are authored as them), which they generate themselves in GitHub. On the `/admin`
+login screen there are two buttons:
 
-**Token expiry.** A token can be set to expire or to **never expire**. For a
-low-friction, effectively one-time sign-in, create the token with a **long or no
-expiry**. When a token does expire, the editor simply repeats the sign-in (same
-steps). A **fine-grained** token scoped to just this repository's _Contents
-(read/write)_ is the tightest option; a **classic** token with the `repo` scope
-and "No expiration" is the most convenient.
+- **"Sign in with access token"** — the intended, self-contained path. It just
+  prompts for a token (it does **not** auto-open GitHub or pre-select scopes), so
+  create the token first (steps below) and paste it. Stored locally in that
+  browser only.
+- **"Sign in with GitHub"** — one-click OAuth, but with no `base_url` configured
+  it routes through a **shared third-party** OAuth app (the Netlify-compatible
+  default) we don't control. Avoid it; use the token.
+
+**Create the token — fine-grained (recommended, tightest):** GitHub → _Settings →
+Developer settings → Personal access tokens → Fine-grained tokens → Generate new
+token_. Set **Resource owner** = the repo's owner, **Repository access** = _Only
+select repositories_ → this repo, **Permissions → Repository → Contents: Read and
+write** (Metadata read is added automatically), and **Expiration** = _No
+expiration_ or the longest offered. Generate and copy the `github_pat_…` value.
+_(Verified working 2026-07-23.)_
+
+**Simpler fallback — classic token:** _Tokens (classic) → Generate new token
+(classic)_ → tick the **`repo`** scope, _No expiration_.
+
+**Token expiry.** With a long/no expiry the sign-in is effectively one-time
+(stored per browser). When a token does expire, the editor just creates a new one
+and signs in again.
 
 > Because there is no shared infrastructure, this template works out of the box
 > for any fork — no per-deployment auth setup.
