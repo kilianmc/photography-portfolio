@@ -5,8 +5,8 @@ city: Barcelona
 statement: "Entre llums i flors, capturo emocions."
 portrait: ../assets/portrait.jpg
 portraitAlt: Autoretrat de Laia
-email: hola@laia.art.photo
-instagram: https://instagram.com/
+email: laiamateocanovas@gmail.com
+instagram: https://www.instagram.com/laia.art.photo/
 website: https://laia.art.photo
 ---
 
