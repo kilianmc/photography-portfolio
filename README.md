@@ -1,8 +1,8 @@
 # photography-portfolio
 
-A museum-quality photography-portfolio website — a showcase example in Kilian's
-web-dev portfolio. The live example instance is **Laia** (laia.art.photo), a
-Barcelona portrait/flower/light photographer.
+A museum-quality photography-portfolio website — a generic, reusable template.
+It ships with example content (a fictional photographer) so the site looks
+complete out of the box.
 
 Warm-gallery aesthetic, Catalan content with an auto-adapting multilingual UI,
 portrait-first grids, and near-zero JavaScript.

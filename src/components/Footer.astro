@@ -1,5 +1,6 @@
 ---
 import { ui, defaultLang } from "../i18n/ui";
+import { frontmatter as about } from "../content/about.md";
 
 const t = ui[defaultLang];
 const year = new Date().getFullYear();
@@ -13,54 +14,70 @@ const year = new Date().getFullYear();
         <span data-i18n="rights">{t.rights}</span>
       </button>
       <span class="rights-tip" id="rights-tip" role="tooltip">
-        © {year} Laia. Totes les obres estan protegides per drets d'autor i no es
-        poden reproduir ni utilitzar sense el seu permís.
+        © {year} Laia.{" "}
+        <span data-i18n="rights_notice"
+          >Totes les obres estan protegides per drets d'autor i no es poden
+          reproduir ni utilitzar sense el seu permís.</span
+        >
       </span>
     </span>
   </p>
 
   <div class="links">
-    <a
-      class="icon"
-      href="https://instagram.com/"
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Instagram"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        width="20"
-        height="20"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.6"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
-        <circle cx="12" cy="12" r="4"></circle>
-        <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"
-        ></circle>
-      </svg>
-    </a>
+    {
+      about.instagram && (
+        <a
+          class="icon"
+          href={about.instagram}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Instagram"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle
+              cx="17.5"
+              cy="6.5"
+              r="1.1"
+              fill="currentColor"
+              stroke="none"
+            />
+          </svg>
+        </a>
+      )
+    }
 
-    <a class="icon" href="mailto:hola@laia.art.photo" aria-label="Correu">
-      <svg
-        viewBox="0 0 24 24"
-        width="20"
-        height="20"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.6"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-        <path d="M3.5 6.5 L12 12.5 L20.5 6.5"></path>
-      </svg>
-    </a>
+    {
+      about.email && (
+        <a class="icon" href={`mailto:${about.email}`} aria-label="Correu">
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M3.5 6.5 L12 12.5 L20.5 6.5" />
+          </svg>
+        </a>
+      )
+    }
   </div>
 </footer>
 

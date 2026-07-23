@@ -43,8 +43,9 @@ const collectionsCollection = defineCollection({
       // present → the collection page also renders as an exhibition
       location: z.string().optional(),
       city: z.string().optional(),
-      startDate: z.date().optional(),
-      endDate: z.date().optional(),
+      // coerce so a CMS-written date (string or YAML date) always validates
+      startDate: z.coerce.date().optional(),
+      endDate: z.coerce.date().optional(),
     }),
 });
 
