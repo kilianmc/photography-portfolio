@@ -2,9 +2,20 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 import { Content, frontmatter } from "../content/about.md";
-import portrait from "../assets/portrait.jpg";
+
+// Resolve the CMS-managed portrait path (e.g. ../assets/portrait.jpg) to an
+// optimisable image. Keys match because about.md and this file are both one
+// level under src/. Eager glob only pulls in lightweight image metadata.
+const assetImages = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/**/*.{jpeg,jpg,png,webp,avif}",
+  { eager: true },
+);
+const portrait = frontmatter.portrait
+  ? assetImages[frontmatter.portrait]?.default
+  : undefined;
 ---
 
 <BaseLayout
@@ -14,15 +25,19 @@ import portrait from "../assets/portrait.jpg";
   <Header />
 
   <main class="about">
-    <div class="portrait">
-      <Image
-        src={portrait}
-        alt={`Autoretrat de ${frontmatter.name}`}
-        widths={[500, 800, 1100]}
-        sizes="(max-width: 820px) 100vw, 45vw"
-        loading="eager"
-      />
-    </div>
+    {
+      portrait && (
+        <div class="portrait">
+          <Image
+            src={portrait}
+            alt={frontmatter.portraitAlt ?? `Autoretrat de ${frontmatter.name}`}
+            widths={[500, 800, 1100]}
+            sizes="(max-width: 820px) 100vw, 45vw"
+            loading="eager"
+          />
+        </div>
+      )
+    }
 
     <div class="text">
       <p class="eyebrow">
