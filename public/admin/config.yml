@@ -1,0 +1,282 @@
+# Sveltia CMS configuration — https://sveltiacms.app
+#
+# Git-based CMS: every change the artist makes is committed straight to the repo as a
+# Markdown file (+ uploaded image), exactly matching the schema in
+# src/content.config.ts, so Astro's astro:assets pipeline optimises the images
+# on the next build. Nothing here changes how the site builds.
+#
+# The per-collection `media_folder`/`public_folder` are set to the SAME relative
+# path (relative to each entry's folder). That makes uploads land in
+# src/assets/... and stores the path as e.g. ../../assets/works/foo.jpg — the
+# relative form Astro's image() helper expects.
+
+backend:
+  name: github
+  repo: kilianmc/photography-portfolio
+  # Content commits go straight to `main` (the branch Cloudflare Pages deploys),
+  # so the artist's edits go live on publish — no dev→main promotion needed.
+  # Code still flows feature→dev→main; promotions merge (not ff) to preserve her
+  # content, and main→dev back-merges keep dev in sync. See docs/CMS.md.
+  branch: main
+  # URL of the sveltia-cms-auth Cloudflare Worker (see docs/CMS.md).
+  # Replace the placeholder after deploying the worker.
+  base_url: https://REPLACE-WITH-AUTH-WORKER.workers.dev
+
+# Fallback media location (collections below override this per type).
+media_folder: src/assets
+public_folder: /src/assets
+
+# The site content is Catalan-only by design (the UI chrome i18n is handled
+# separately in src/i18n), so the CMS is single-locale.
+
+collections:
+  # ── Obres (single photographs) ────────────────────────────────────────────
+  - name: works
+    label: Obres
+    label_singular: Obra
+    description: Fotografies individuals.
+    folder: src/content/works
+    create: true
+    format: yaml-frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}} ({{year}})"
+    media_folder: ../../assets/works
+    public_folder: ../../assets/works
+    fields:
+      - { name: title, label: Títol, widget: string }
+      - {
+          name: year,
+          label: Any,
+          widget: number,
+          value_type: int,
+          min: 1900,
+          max: 2100,
+        }
+      - { name: medium, label: Tècnica, widget: string, default: Fotografia }
+      - { name: dimensions, label: Dimensions, widget: string, required: false }
+      - {
+          name: description,
+          label: Descripció,
+          widget: text,
+          required: false,
+        }
+      - name: collection
+        label: Col·lecció
+        widget: relation
+        collection: collections
+        value_field: "{{slug}}"
+        search_fields: [title]
+        display_fields: [title]
+        hint: Cada obra pertany a una col·lecció. Si encara no existeix, crea-la primer a «Col·leccions» i després torna aquí.
+      - {
+          name: coverImage,
+          label: Imatge principal,
+          widget: image,
+          choose_url: false,
+          hint: "Formats: JPG, PNG, WebP o AVIF (evita HEIC, TIFF o GIF).",
+        }
+      - {
+          name: coverAlt,
+          label: Text alternatiu (accessibilitat),
+          widget: string,
+          hint: Descriu la imatge per a lectors de pantalla.,
+        }
+      - {
+          name: featured,
+          label: Destacada a la portada,
+          widget: boolean,
+          default: false,
+        }
+      - {
+          name: draft,
+          label: Esborrany (no es publica),
+          widget: boolean,
+          default: false,
+        }
+      - name: gallery
+        label: Galeria (imatges addicionals)
+        widget: list
+        required: false
+        label_singular: Imatge
+        summary: "{{fields.alt}}"
+        fields:
+          - {
+              name: image,
+              label: Imatge,
+              widget: image,
+              choose_url: false,
+              hint: "Formats: JPG, PNG, WebP o AVIF (evita HEIC, TIFF o GIF).",
+            }
+          - { name: alt, label: Text alternatiu, widget: string }
+      - {
+          name: body,
+          label: Text (opcional),
+          widget: markdown,
+          required: false,
+        }
+
+  # ── Col·leccions / Exposicions ──────────────────────────────────────────────
+  - name: collections
+    label: Col·leccions
+    label_singular: Col·lecció
+    description: Grups d'obres. Si hi afegeixes lloc i dates, es mostra com una exposició.
+    folder: src/content/collections
+    create: true
+    format: yaml-frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    media_folder: ../../assets/collections
+    public_folder: ../../assets/collections
+    fields:
+      - { name: title, label: Títol, widget: string }
+      - {
+          name: description,
+          label: Descripció,
+          widget: text,
+          required: false,
+        }
+      - {
+          name: coverImage,
+          label: Imatge principal,
+          widget: image,
+          choose_url: false,
+          hint: "Formats: JPG, PNG, WebP o AVIF (evita HEIC, TIFF o GIF).",
+        }
+      - { name: coverAlt, label: Text alternatiu, widget: string }
+      - {
+          name: order,
+          label: Ordre,
+          widget: number,
+          value_type: int,
+          required: false,
+          hint: Número més baix = apareix abans.,
+        }
+      - {
+          name: featured,
+          label: Destacada a la portada,
+          widget: boolean,
+          default: false,
+        }
+      - {
+          name: draft,
+          label: Esborrany (no es publica),
+          widget: boolean,
+          default: false,
+        }
+      # ── Exhibition fields ──────────────────────────────────────────────────
+      # Kept flat (top-level) to match the Zod schema. These four are OPTIONAL:
+      # leaving them empty = an ordinary collection; filling in a place and/or a
+      # start date makes the collection render AS an exhibition (place + dates +
+      # a "Current/Past" badge). The label prefix "Exposició ·" groups them.
+      - {
+          name: location,
+          label: "Exposició · Lloc / galeria",
+          widget: string,
+          required: false,
+          hint: "OPCIONAL — camps d'exposició. Si omples el lloc i/o la data d'inici, aquesta col·lecció es mostrarà com una EXPOSICIÓ (amb lloc, dates i una etiqueta Actual/Passada). Deixa'ls buits per a una col·lecció normal.",
+        }
+      - {
+          name: city,
+          label: "Exposició · Ciutat",
+          widget: string,
+          required: false,
+        }
+      - {
+          name: startDate,
+          label: "Exposició · Data d'inici",
+          widget: datetime,
+          required: false,
+          date_format: YYYY-MM-DD,
+          time_format: false,
+          picker_utc: true,
+          hint: Marca l'inici de l'exposició. En determina l'etiqueta Actual/Passada.,
+        }
+      - {
+          name: endDate,
+          label: "Exposició · Data de fi",
+          widget: datetime,
+          required: false,
+          date_format: YYYY-MM-DD,
+          time_format: false,
+          picker_utc: true,
+        }
+      - { name: body, label: Text, widget: markdown, required: false }
+
+  # ── Portada (fitxer únic) ───────────────────────────────────────────────────
+  - name: home
+    label: Portada
+    description: La imatge gran de la pàgina d'inici.
+    files:
+      - name: home
+        label: Portada
+        file: src/content/home.md
+        media_folder: ../assets/home
+        public_folder: ../assets/home
+        fields:
+          - {
+              name: heroImage,
+              label: Imatge de portada,
+              widget: image,
+              choose_url: false,
+              hint: "Formats: JPG, PNG, WebP o AVIF (evita HEIC, TIFF o GIF).",
+            }
+          - {
+              name: heroAlt,
+              label: Text alternatiu (accessibilitat),
+              widget: string,
+              hint: Descriu la imatge per a lectors de pantalla.,
+            }
+          - {
+              name: intro,
+              label: Text d'introducció,
+              widget: text,
+              hint: El paràgraf curt que apareix a la pàgina d'inici, sota el nom de la ciutat.,
+            }
+
+  # ── Sobre l'autora (fitxer únic) ────────────────────────────────────────────
+  - name: about
+    label: Sobre l'autora
+    description: La pàgina "Sobre l'autora".
+    files:
+      - name: about
+        label: Sobre l'autora
+        file: src/content/about.md
+        media_folder: ../assets
+        public_folder: ../assets
+        fields:
+          - { name: name, label: Nom, widget: string }
+          - { name: role, label: Rol, widget: string }
+          - { name: city, label: Ciutat, widget: string }
+          - {
+              name: statement,
+              label: Frase / declaració,
+              widget: string,
+            }
+          - {
+              name: portrait,
+              label: Retrat,
+              widget: image,
+              choose_url: false,
+              required: false,
+              hint: "Formats: JPG, PNG, WebP o AVIF (evita HEIC, TIFF o GIF).",
+            }
+          - {
+              name: portraitAlt,
+              label: Text alternatiu del retrat,
+              widget: string,
+              required: false,
+            }
+          - { name: email, label: Correu, widget: string }
+          - {
+              name: instagram,
+              label: Instagram (URL),
+              widget: string,
+              required: false,
+            }
+          - {
+              name: website,
+              label: Web (URL),
+              widget: string,
+              required: false,
+            }
+          - { name: body, label: Biografia, widget: markdown }

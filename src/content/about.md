@@ -3,6 +3,8 @@ name: Laia
 role: Fotògrafa
 city: Barcelona
 statement: "Entre llums i flors, capturo emocions."
+portrait: ../assets/portrait.jpg
+portraitAlt: Autoretrat de Laia
 email: hola@laia.art.photo
 instagram: https://instagram.com/
 website: https://laia.art.photo
