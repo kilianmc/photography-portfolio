@@ -10,7 +10,7 @@ import { Content, frontmatter } from "../content/about.md";
 // optimisable image. Keys match because about.md and this file are both one
 // level under src/. Eager glob only pulls in lightweight image metadata.
 const assetImages = import.meta.glob<{ default: ImageMetadata }>(
-  "../assets/**/*.{jpeg,jpg,png,webp,avif}",
+  "../assets/**/*.{jpeg,jpg,png,webp,avif,JPEG,JPG,PNG,WEBP,AVIF}",
   { eager: true },
 );
 const portrait = frontmatter.portrait
@@ -24,7 +24,7 @@ const portrait = frontmatter.portrait
 >
   <Header />
 
-  <main class="about">
+  <main class:list={["about", { "about--solo": !portrait }]}>
     {
       portrait && (
         <div class="portrait">
@@ -81,6 +81,11 @@ const portrait = frontmatter.portrait
     max-width: 72rem;
     margin: 0 auto;
     padding: clamp(2.5rem, 7vw, 5rem) var(--gutter);
+  }
+  /* No portrait set → single column so the text isn't cramped beside a gap. */
+  .about--solo {
+    grid-template-columns: 1fr;
+    max-width: 46rem;
   }
   .portrait {
     position: relative;
