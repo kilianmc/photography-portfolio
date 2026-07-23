@@ -18,12 +18,15 @@ interface Props {
   description?: string;
   /** Absolute path to an OG image for this page (falls back to the site default). */
   ogImage?: string;
+  /** Keep this page out of search engines (e.g. the unlisted editor guide). */
+  noindex?: boolean;
 }
 
 const {
   title,
   description = "Fotografia de retrat, flors i llum. Barcelona.",
   ogImage,
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
@@ -45,6 +48,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />

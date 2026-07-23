@@ -1,0 +1,76 @@
+---
+// Unlisted editor guide: renders docs/GUIA-CMS.ca.md as a styled page.
+// noindex + not linked anywhere on the public site — the URL is only surfaced
+// inside the CMS (collection descriptions), so only logged-in editors find it.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { Content } from "../../docs/GUIA-CMS.ca.md";
+---
+
+<BaseLayout title="Guia del gestor de continguts" noindex>
+  <Header />
+  <main class="guide">
+    <article class="prose">
+      <Content />
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .guide {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 7vw, 5rem) var(--gutter);
+  }
+  .prose {
+    color: var(--color-ink);
+    line-height: 1.7;
+  }
+  .prose :global(h1) {
+    font-family: var(--font-display, serif);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1.15;
+    margin: 0 0 1rem;
+  }
+  .prose :global(h2) {
+    font-family: var(--font-display, serif);
+    font-size: 1.4rem;
+    margin: 2.4rem 0 0.8rem;
+    border-top: 1px solid var(--color-hairline);
+    padding-top: 1.6rem;
+  }
+  .prose :global(h3) {
+    font-size: 1.1rem;
+    margin: 1.6rem 0 0.5rem;
+  }
+  .prose :global(p),
+  .prose :global(li) {
+    margin: 0.6rem 0;
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.4rem;
+  }
+  .prose :global(a) {
+    color: var(--color-terracotta);
+  }
+  .prose :global(code) {
+    background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  .prose :global(blockquote) {
+    margin: 1rem 0;
+    padding: 0.6rem 1rem;
+    border-left: 3px solid var(--color-terracotta);
+    background: color-mix(in srgb, var(--color-terracotta) 6%, transparent);
+    color: var(--color-ink-soft);
+    border-radius: 0 4px 4px 0;
+  }
+  .prose :global(blockquote p) {
+    margin: 0.3rem 0;
+  }
+</style>

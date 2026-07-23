@@ -8,19 +8,30 @@ formularis.
 
 Per entrar necessites un **compte de GitHub** amb permís d'edició del web (això
 te'l dona una vegada qui gestiona el web). La primera vegada crearàs un **testimoni**
-(«token») —una mena de contrasenya llarga— que et connecta amb GitHub. És fàcil:
+(«token») —una mena de contrasenya llarga— que et connecta amb GitHub.
+
+**Primer, crea el testimoni a GitHub** (només un cop):
+
+1. A GitHub, ves a **Settings → Developer settings → Personal access tokens →
+   Fine-grained tokens → Generate new token**.
+2. Posa-hi un **nom** (p. ex. «CMS web»).
+3. **Expiration** (caducitat): tria **«No expiration»** (sense caducitat) o el
+   termini més llarg que hi hagi, així no l'hauràs de refer sovint.
+4. **Repository access:** _Only select repositories_ → tria el repositori del web.
+5. **Permissions → Repository permissions → Contents:** posa-hi **Read and write**.
+6. Clica **Generate token** i **copia** el testimoni (comença per `github_pat_…`).
+
+**Després, entra al gestor:**
 
 1. Ves a **`https://<el-teu-web>.pages.dev/admin`** (l'adreça del teu web + `/admin`).
-2. Clica **«Sign In with Token»** (Inicia sessió amb testimoni).
-3. S'obrirà la pàgina de GitHub per crear el testimoni, **amb els permisos ja
-   marcats**. A baix de tot, a **Expiration** (caducitat), tria **«No
-   expiration»** (sense caducitat) o el termini més llarg que hi hagi — així no
-   l'hauràs de tornar a fer sovint. Després clica el botó verd per generar-lo.
-4. **Copia** el testimoni (una llarga tira de lletres i números) i **enganxa'l**
-   a la finestra del gestor. Ja hi ets.
-5. A l'esquerra veuràs les seccions: **Obres**, **Col·leccions**, **Portada** i
+2. Clica **«Sign in with access token»** (Inicia sessió amb testimoni).
+3. **Enganxa** el testimoni que has copiat i confirma. Ja hi ets.
+4. A l'esquerra veuràs les seccions: **Obres**, **Col·leccions**, **Portada** i
    **Sobre l'autora**.
 
+> Hi ha també un botó «Sign in with GitHub». No el facis servir —fes servir sempre
+> l'opció del testimoni.
+>
 > El testimoni es desa al teu navegador, així que normalment només ho fas un cop.
 > Si algun dia et demana tornar a entrar (perquè ha caducat o canvies d'ordinador),
 > repeteix aquests mateixos passos.
