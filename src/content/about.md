@@ -2,7 +2,7 @@
 name: Laia
 role: Fotògrafa
 city: Barcelona
-statement: "Entre llums i flors, capturo emocions."
+statement: Entre llums i flors, capturo emocions.
 portrait: ../assets/portrait.jpg
 portraitAlt: Autoretrat de Laia
 email: laiamateocanovas@gmail.com
@@ -16,4 +16,4 @@ cinematogràfica.
 
 Treballa tant en analògic com en digital, i exposa regularment a Catalunya.
 
-_(Biografia provisional — contingut real pendent.)_
+_(Biografia en estat provisional — contingut real pendent.)_
