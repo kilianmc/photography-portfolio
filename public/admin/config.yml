@@ -15,12 +15,12 @@ backend:
   repo: kilianmc/photography-portfolio
   # Content commits go straight to `main` (the branch Cloudflare Pages deploys),
   # so the artist's edits go live on publish — no dev→main promotion needed.
-  # Code still flows feature→dev→main; promotions merge (not ff) to preserve her
+  # Code still flows feature→dev→main; promotions merge (not ff) to preserve that
   # content, and main→dev back-merges keep dev in sync. See docs/CMS.md.
   branch: main
-  # URL of the sveltia-cms-auth Cloudflare Worker (see docs/CMS.md).
-  # Replace the placeholder after deploying the worker.
-  base_url: https://REPLACE-WITH-AUTH-WORKER.workers.dev
+  # Auth: the editor uses "Sign In with Token" (a GitHub personal access token) —
+  # no OAuth worker, no `base_url`, no secrets. The editor just needs a GitHub
+  # account with write access to the repo. See docs/CMS.md.
 
 # Fallback media location (collections below override this per type).
 media_folder: src/assets

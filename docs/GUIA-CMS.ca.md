@@ -6,11 +6,25 @@ formularis.
 
 ## Com entrar
 
-1. Ves a **`https://<el-teu-web>.pages.dev/admin`** (l'adreça del teu web + `/admin`)
-2. Clica **Inicia sessió amb GitHub** i autoritza l'accés.
-3. Ja hi ets. A l'esquerra veuràs les seccions: **Obres**, **Col·leccions**,
-   **Portada** i **Sobre l'autora**.
+Per entrar necessites un **compte de GitHub** amb permís d'edició del web (això
+te'l dona una vegada qui gestiona el web). La primera vegada crearàs un **testimoni**
+(«token») —una mena de contrasenya llarga— que et connecta amb GitHub. És fàcil:
 
+1. Ves a **`https://<el-teu-web>.pages.dev/admin`** (l'adreça del teu web + `/admin`).
+2. Clica **«Sign In with Token»** (Inicia sessió amb testimoni).
+3. S'obrirà la pàgina de GitHub per crear el testimoni, **amb els permisos ja
+   marcats**. A baix de tot, a **Expiration** (caducitat), tria **«No
+   expiration»** (sense caducitat) o el termini més llarg que hi hagi — així no
+   l'hauràs de tornar a fer sovint. Després clica el botó verd per generar-lo.
+4. **Copia** el testimoni (una llarga tira de lletres i números) i **enganxa'l**
+   a la finestra del gestor. Ja hi ets.
+5. A l'esquerra veuràs les seccions: **Obres**, **Col·leccions**, **Portada** i
+   **Sobre l'autora**.
+
+> El testimoni es desa al teu navegador, així que normalment només ho fas un cop.
+> Si algun dia et demana tornar a entrar (perquè ha caducat o canvies d'ordinador),
+> repeteix aquests mateixos passos.
+>
 > Quan publiques un canvi, el web es torna a generar sol i el canvi surt en línia
 > en un o dos minuts. No cal fer res més.
 
