@@ -30,26 +30,24 @@ const years = [...new Set(works.map((w) => w.data.year))].sort((a, b) => b - a);
 
     <div class="filters" id="work-filters">
       <div class="filter-group" data-group="collection">
-        <button class="chip is-active" data-value="all" data-i18n="view_all"
-          >Totes</button
-        >
-        {
-          usedCollections.map((c) => (
-            <button class="chip" data-value={c.id}>
-              {c.title}
-            </button>
-          ))
-        }
+        <button class="chip is-active" data-value="all" data-i18n="view_all">
+          Totes
+        </button>
+        {usedCollections.map((c) => (
+          <button class="chip" data-value={c.id}>
+            {c.title}
+          </button>
+        ))}
       </div>
       <div class="filter-group" data-group="year">
-        <button class="chip is-active" data-value="all">Any</button>
-        {
-          years.map((y) => (
-            <button class="chip" data-value={String(y)}>
-              {y}
-            </button>
-          ))
-        }
+        <button class="chip is-active" data-value="all">
+          Any
+        </button>
+        {years.map((y) => (
+          <button class="chip" data-value={String(y)}>
+            {y}
+          </button>
+        ))}
       </div>
     </div>
 
@@ -57,20 +55,20 @@ const years = [...new Set(works.map((w) => w.data.year))].sort((a, b) => b - a);
       class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8 lg:grid-cols-3"
       id="work-grid"
     >
-      {
-        works.map((w, i) => (
-          <div
-            class="work-item"
-            data-collection={w.data.collection.id}
-            data-year={w.data.year}
-          >
-            <WorkCard work={w} loading={i < 3 ? "eager" : "lazy"} />
-          </div>
-        ))
-      }
+      {works.map((w, i) => (
+        <div
+          class="work-item"
+          data-collection={w.data.collection.id}
+          data-year={w.data.year}
+        >
+          <WorkCard work={w} loading={i < 3 ? "eager" : "lazy"} />
+        </div>
+      ))}
     </div>
 
-    <p class="empty" id="work-empty" hidden>Cap obra en aquest filtre.</p>
+    <p class="empty" id="work-empty" hidden>
+      Cap obra en aquest filtre.
+    </p>
   </main>
 
   <Footer />
