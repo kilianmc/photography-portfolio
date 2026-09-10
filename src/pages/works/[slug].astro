@@ -34,11 +34,9 @@ const meta = [d.medium, d.dimensions, String(d.year)].filter(Boolean);
   <main class="work">
     <nav class="crumb">
       <a href="/works">← Obres</a>
-      {
-        collection && (
-          <a href={`/collections/${collection.id}`}>{collection.data.title}</a>
-        )
-      }
+      {collection && (
+        <a href={`/collections/${collection.id}`}>{collection.data.title}</a>
+      )}
     </nav>
 
     <div class="stage">
@@ -55,55 +53,47 @@ const meta = [d.medium, d.dimensions, String(d.year)].filter(Boolean);
         <h1>{d.title}</h1>
         <p class="meta">{meta.join(" · ")}</p>
         {d.description && <p class="desc">{d.description}</p>}
-        {
-          collection && (
-            <p class="in">
-              A{" "}
-              <a href={`/collections/${collection.id}`}>
-                {collection.data.title}
-              </a>
-            </p>
-          )
-        }
+        {collection && (
+          <p class="in">
+            A{" "}
+            <a href={`/collections/${collection.id}`}>
+              {collection.data.title}
+            </a>
+          </p>
+        )}
       </aside>
     </div>
 
-    {
-      d.gallery && d.gallery.length > 0 && (
-        <div class="gallery">
-          {d.gallery.map((g) => (
-            <Photo
-              src={g.image}
-              alt={g.alt}
-              ratio="4 / 3"
-              sizes="(max-width: 700px) 100vw, 50vw"
-            />
-          ))}
-        </div>
-      )
-    }
+    {d.gallery && d.gallery.length > 0 && (
+      <div class="gallery">
+        {d.gallery.map((g) => (
+          <Photo
+            src={g.image}
+            alt={g.alt}
+            ratio="4 / 3"
+            sizes="(max-width: 700px) 100vw, 50vw"
+          />
+        ))}
+      </div>
+    )}
 
     <nav class="pager">
-      {
-        prev ? (
-          <a class="pager-link prev" href={`/works/${prev.id}`}>
-            <span class="dir">← Anterior</span>
-            <span class="t">{prev.data.title}</span>
-          </a>
-        ) : (
-          <span />
-        )
-      }
-      {
-        next ? (
-          <a class="pager-link next" href={`/works/${next.id}`}>
-            <span class="dir">Següent →</span>
-            <span class="t">{next.data.title}</span>
-          </a>
-        ) : (
-          <span />
-        )
-      }
+      {prev ? (
+        <a class="pager-link prev" href={`/works/${prev.id}`}>
+          <span class="dir">← Anterior</span>
+          <span class="t">{prev.data.title}</span>
+        </a>
+      ) : (
+        <span />
+      )}
+      {next ? (
+        <a class="pager-link next" href={`/works/${next.id}`}>
+          <span class="dir">Següent →</span>
+          <span class="t">{next.data.title}</span>
+        </a>
+      ) : (
+        <span />
+      )}
     </nav>
   </main>
 

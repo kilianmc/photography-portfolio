@@ -39,17 +39,15 @@ const status = featured ? exhibitionStatus(featured) : null;
 
   <section class="hero">
     <div class="hero-photo">
-      {
-        heroImg && (
-          <Image
-            src={heroImg}
-            alt={home.heroAlt ?? "Retrat a contrallum amb flors"}
-            widths={[800, 1200, 1800]}
-            sizes="100vw"
-            loading="eager"
-          />
-        )
-      }
+      {heroImg && (
+        <Image
+          src={heroImg}
+          alt={home.heroAlt ?? "Retrat a contrallum amb flors"}
+          widths={[800, 1200, 1800]}
+          sizes="100vw"
+          loading="eager"
+        />
+      )}
     </div>
     <div class="hero-caption">
       <h1>Laia</h1>
@@ -61,16 +59,14 @@ const status = featured ? exhibitionStatus(featured) : null;
     <section class="section">
       <div class="section-head">
         <h2 data-i18n="selected_works">Obres seleccionades</h2>
-        <a href="/works" data-i18n="view_all">Veure-les totes →</a>
+        <a href="/works" data-i18n="view_all">
+          Veure-les totes →
+        </a>
       </div>
-      <div
-        class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8 lg:grid-cols-3"
-      >
-        {
-          featuredWorks.map((w, i) => (
-            <WorkCard work={w} loading={i === 0 ? "eager" : "lazy"} />
-          ))
-        }
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
+        {featuredWorks.map((w, i) => (
+          <WorkCard work={w} loading={i === 0 ? "eager" : "lazy"} />
+        ))}
       </div>
     </section>
 
@@ -78,46 +74,46 @@ const status = featured ? exhibitionStatus(featured) : null;
       <div class="bio">
         <h2>{about.city}</h2>
         <p>{home.intro}</p>
-        <a class="more" href="/about" data-i18n="read_more">Llegir més</a>
+        <a class="more" href="/about" data-i18n="read_more">
+          Llegir més
+        </a>
       </div>
     </section>
 
-    {
-      featured && (
-        <section class="section">
-          <div class="section-head">
-            <h2 data-i18n="collections">Col·leccions</h2>
-            <a href="/collections" data-i18n="view_all">
-              Veure-les totes →
-            </a>
-          </div>
-          <a class="feature" href={`/collections/${featured.id}`}>
-            <Photo
-              src={featured.data.coverImage}
-              alt={featured.data.coverAlt}
-              ratio="3 / 2"
-              sizes="(max-width: 760px) 100vw, 60vw"
-            />
-            <div>
-              {status === "current" && (
-                <span class="badge" data-i18n="current">
-                  Exposició actual
-                </span>
-              )}
-              <h3>{featured.data.title}</h3>
-              {(featured.data.city || featured.data.startDate) && (
-                <p class="where">
-                  {[featured.data.city, featured.data.startDate?.getFullYear()]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </p>
-              )}
-              {featured.data.description && <p>{featured.data.description}</p>}
-            </div>
+    {featured && (
+      <section class="section">
+        <div class="section-head">
+          <h2 data-i18n="collections">Col·leccions</h2>
+          <a href="/collections" data-i18n="view_all">
+            Veure-les totes →
           </a>
-        </section>
-      )
-    }
+        </div>
+        <a class="feature" href={`/collections/${featured.id}`}>
+          <Photo
+            src={featured.data.coverImage}
+            alt={featured.data.coverAlt}
+            ratio="3 / 2"
+            sizes="(max-width: 760px) 100vw, 60vw"
+          />
+          <div>
+            {status === "current" && (
+              <span class="badge" data-i18n="current">
+                Exposició actual
+              </span>
+            )}
+            <h3>{featured.data.title}</h3>
+            {(featured.data.city || featured.data.startDate) && (
+              <p class="where">
+                {[featured.data.city, featured.data.startDate?.getFullYear()]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </p>
+            )}
+            {featured.data.description && <p>{featured.data.description}</p>}
+          </div>
+        </a>
+      </section>
+    )}
   </main>
 
   <Footer />

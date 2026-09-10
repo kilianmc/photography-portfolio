@@ -9,21 +9,31 @@ const t = ui[defaultLang];
 ---
 
 <header id="site-header">
-  <a class="brand" href="/">Laia</a>
+  <a class="brand" href="/">
+    Laia
+  </a>
   <nav>
     <ul>
       <li class="nav-link">
-        <a href="/works" data-i18n="works">{t.works}</a>
+        <a href="/works" data-i18n="works">
+          {t.works}
+        </a>
       </li>
       <li class="nav-link">
-        <a href="/collections" data-i18n="collections">{t.collections}</a>
+        <a href="/collections" data-i18n="collections">
+          {t.collections}
+        </a>
       </li>
       <li class="nav-link">
-        <a href="/about" data-i18n="about">{t.about}</a>
+        <a href="/about" data-i18n="about">
+          {t.about}
+        </a>
       </li>
       <li class="lang">
         <select id="lang-select" aria-label="Language">
-          {languages.map((l) => <option value={l}>{l.toUpperCase()}</option>)}
+          {languages.map((l) => (
+            <option value={l}>{l.toUpperCase()}</option>
+          ))}
         </select>
       </li>
     </ul>

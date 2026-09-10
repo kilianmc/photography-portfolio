@@ -48,36 +48,34 @@ const place = [d.location, d.city].filter(Boolean).join(", ");
   <Header />
 
   <main class="mx-auto max-w-6xl px-[var(--gutter)] py-16 md:py-24">
-    <nav class="crumb"><a href="/collections">← Col·leccions</a></nav>
+    <nav class="crumb">
+      <a href="/collections">← Col·leccions</a>
+    </nav>
 
     <header class="intro">
-      {
-        exhibition && status && (
-          <span
-            class="badge"
-            data-i18n={status === "current" ? "current" : undefined}
-          >
-            {status === "current" ? "Exposició actual" : "Exposició passada"}
-          </span>
-        )
-      }
+      {exhibition && status && (
+        <span
+          class="badge"
+          data-i18n={status === "current" ? "current" : undefined}
+        >
+          {status === "current" ? "Exposició actual" : "Exposició passada"}
+        </span>
+      )}
       <h1>{d.title}</h1>
       {place && <p class="where">{place}</p>}
       {dates && <p class="dates">{dates}</p>}
       {d.description && <p class="desc">{d.description}</p>}
     </header>
 
-    {
-      works.length > 0 ? (
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
-          {works.map((w, i) => (
-            <WorkCard work={w} loading={i < 3 ? "eager" : "lazy"} />
-          ))}
-        </div>
-      ) : (
-        <p class="empty">Encara no hi ha obres en aquesta col·lecció.</p>
-      )
-    }
+    {works.length > 0 ? (
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
+        {works.map((w, i) => (
+          <WorkCard work={w} loading={i < 3 ? "eager" : "lazy"} />
+        ))}
+      </div>
+    ) : (
+      <p class="empty">Encara no hi ha obres en aquesta col·lecció.</p>
+    )}
   </main>
 
   <Footer />
