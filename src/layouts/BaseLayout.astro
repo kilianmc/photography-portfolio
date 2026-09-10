@@ -37,7 +37,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
   (Catalan) — only the UI chrome gets translated later via i18n (spec §6), so
   there are no duplicate-content locale pages. View transitions provide the
   cross-fade page motion (spec §8); nothing else animates at the page level.
---><!doctype html>
+-->
+<!doctype html>
 <html lang="ca">
   <head>
     <meta charset="utf-8" />
@@ -70,7 +71,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
       id="i18n-dict"
       is:inline
       set:html={dictJson}
-    />
+    ></script>
     <script>
       /*
        * UI-language chrome swap (spec §6). The page is server-rendered in

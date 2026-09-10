@@ -25,19 +25,17 @@ const portrait = frontmatter.portrait
   <Header />
 
   <main class:list={["about", { "about--solo": !portrait }]}>
-    {
-      portrait && (
-        <div class="portrait">
-          <Image
-            src={portrait}
-            alt={frontmatter.portraitAlt ?? `Autoretrat de ${frontmatter.name}`}
-            widths={[500, 800, 1100]}
-            sizes="(max-width: 820px) 100vw, 45vw"
-            loading="eager"
-          />
-        </div>
-      )
-    }
+    {portrait && (
+      <div class="portrait">
+        <Image
+          src={portrait}
+          alt={frontmatter.portraitAlt ?? `Autoretrat de ${frontmatter.name}`}
+          widths={[500, 800, 1100]}
+          sizes="(max-width: 820px) 100vw, 45vw"
+          loading="eager"
+        />
+      </div>
+    )}
 
     <div class="text">
       <p class="eyebrow">
@@ -56,14 +54,14 @@ const portrait = frontmatter.portrait
           per dir hola— aquests són els canals:
         </p>
         <div class="links">
-          <a href={`mailto:${frontmatter.email}`} data-i18n="email">Correu</a>
-          {
-            frontmatter.instagram && (
-              <a href={frontmatter.instagram} target="_blank" rel="noreferrer">
-                Instagram
-              </a>
-            )
-          }
+          <a href={`mailto:${frontmatter.email}`} data-i18n="email">
+            Correu
+          </a>
+          {frontmatter.instagram && (
+            <a href={frontmatter.instagram} target="_blank" rel="noreferrer">
+              Instagram
+            </a>
+          )}
         </div>
       </div>
     </div>

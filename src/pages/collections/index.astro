@@ -30,34 +30,32 @@ const groups = [
   <main class="mx-auto max-w-6xl px-[var(--gutter)] py-16 md:py-24">
     <h1 class="font-display text-4xl md:text-5xl">Col·leccions</h1>
 
-    {
-      groups.map((group) => (
-        <section class="group">
-          <h2 class="group-head">{group.label}</h2>
-          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
-            {group.items.map((c) => (
-              <a class="coll" href={`/collections/${c.id}`}>
-                <Photo
-                  src={c.data.coverImage}
-                  alt={c.data.coverAlt}
-                  ratio="3 / 2"
-                />
-                <div class="coll-meta">
-                  <h3>{c.data.title}</h3>
-                  {(c.data.city || c.data.startDate) && (
-                    <p class="where">
-                      {[c.data.city, c.data.startDate?.getFullYear()]
-                        .filter(Boolean)
-                        .join(" · ")}
-                    </p>
-                  )}
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-      ))
-    }
+    {groups.map((group) => (
+      <section class="group">
+        <h2 class="group-head">{group.label}</h2>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
+          {group.items.map((c) => (
+            <a class="coll" href={`/collections/${c.id}`}>
+              <Photo
+                src={c.data.coverImage}
+                alt={c.data.coverAlt}
+                ratio="3 / 2"
+              />
+              <div class="coll-meta">
+                <h3>{c.data.title}</h3>
+                {(c.data.city || c.data.startDate) && (
+                  <p class="where">
+                    {[c.data.city, c.data.startDate?.getFullYear()]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </p>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
   </main>
 
   <Footer />
